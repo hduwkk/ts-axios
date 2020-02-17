@@ -7,3 +7,15 @@ export function transformRequest (data: any): any {
   }
   return data
 }
+
+export function transformResponse(data: any): any {
+  console.log(data, 'data .. ..')
+  if (typeof data === 'string') {
+    try {
+      data = JSON.parse(data)
+    } catch (e) {
+      console.error(e)
+    }
+  }
+  return data
+}
