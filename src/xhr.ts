@@ -1,7 +1,6 @@
 import { AxiosRequestConfig, AxiosPromise, AxiosResponse } from './types'
 import {parseHeaders} from './helpers/headers'
-import { resolve } from 'path';
-import { rejects } from 'assert';
+import {createError} from './helpers/error'
 export default function xhr(config: AxiosRequestConfig): AxiosPromise {
   return new Promise((resolve, reject) => {
     let { data = null, url, method = 'get', headers, responseType, timeout } = config
@@ -30,15 +29,26 @@ export default function xhr(config: AxiosRequestConfig): AxiosPromise {
       if (response.status >= 200 && response.status < 300) {
         resolve(response)
       } else {
-        reject(new Error(`Resquest failed with status code ${response.status}`))
+        reject(createError(
+          `Resquest failed with status code ${response.status}`,
+          config,
+          null,
+          request,
+          response
+        ))
       }
     }
 
     request.onerror = function handleError() {
-      reject(new Error('NetWork Error!!'))
+      reject(createError('NetWork Error', config, null, request))
     }
     request.ontimeout = function hadnleTimeout() {
-      reject(new Error(`Timeout of ${timeout} ms exceeded!!`))
+      reject(createError(
+        `Timeout of ${timeout} ms exceeded`,
+        config,
+        'ECONNABORTED',
+        request
+      ))
     }
 
     Object.keys(headers).forEach(name => {
