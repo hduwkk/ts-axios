@@ -42,9 +42,9 @@ function createInstance(): AxiosInatance {
   const context = new Axios()
   const instance = Axios.prototype.request.bind(context)
   extend(instance, context)
+  
   return instance as AxiosInatance
 }
 
 const axios = createInstance()
 export default axios
-
