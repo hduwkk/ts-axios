@@ -1,3 +1,5 @@
+import { transformRequest } from "../helpers/data";
+
 export type Method = 'get' | 'GET' | 'delete' | 'DELETE' | 'head' | 'HEAD' | 'options' | 'OPTIONS' | 'post' | 'POST' | 'put' | 'PUT' | 'patch' | 'PATCH'
 export interface AxiosRequestConfig {
   [propName: string]: any
@@ -8,8 +10,12 @@ export interface AxiosRequestConfig {
   headers?: any
   timeout?: number
   responseType?: XMLHttpRequestResponseType // 它的定义是"" | 'arraybuffer' | 'blob' | 'document' | 'json' | 'text'
+  transformRequest?: AxiosTransformer | AxiosTransformer[]
+  transformResponse?: AxiosTransformer | AxiosTransformer[]
 }
-
+export interface AxiosTransformer {
+  (data: any, headers?: any): any
+}
 export interface AxiosResponse<T = any> {
   data: T
   status: number
