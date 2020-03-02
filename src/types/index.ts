@@ -1,7 +1,8 @@
 export type Method = 'get' | 'GET' | 'delete' | 'DELETE' | 'head' | 'HEAD' | 'options' | 'OPTIONS' | 'post' | 'POST' | 'put' | 'PUT' | 'patch' | 'PATCH'
 export interface AxiosRequestConfig {
+  [propName: string]: any
   url?: string
-  method?: string
+  method?: Method
   data?: any
   params?: any
   headers?: any
@@ -29,6 +30,7 @@ export interface AxiosError extends Error {
 }
 
 export interface Axios {
+  defaults: AxiosRequestConfig
   interceptors: {
     request: AxiosInterceptorManager<AxiosRequestConfig>
     response: AxiosInterceptorManager<AxiosResponse>

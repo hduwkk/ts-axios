@@ -37,3 +37,9 @@ axios({
 }).then((res) => {
   console.log(res.data)
 })
+
+declare global {
+  interface Window {
+    axios: any
+  }
+}

@@ -30,6 +30,8 @@ registerSimpleRouter()
 registerBaseRouter()
 registerErrorRouter()
 registerExtendRouter()
+registerInterceptorRouter()
+registerConfigRouter()
 
 function registerSimpleRouter() {
   router.get('/simple/get', (req, res) => res.json({msg: `hello world`}))
@@ -116,6 +118,16 @@ function registerExtendRouter () {
   })
 }
 
+function registerInterceptorRouter() {
+  router.get('/interceptor/get', function(req, res) {
+    res.end('hello')
+  })
+}
+function registerConfigRouter() {
+  router.post('/config/post', function(req, res) {
+    res.json(req.body)
+  })
+}
 app.use(router)
 const port = process.env.PORT || 8000
 module.exports = app.listen(port, () => {
