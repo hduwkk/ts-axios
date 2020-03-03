@@ -1,9 +1,10 @@
 import { AxiosRequestConfig, AxiosPromise, AxiosResponse } from '../types'
 import {parseHeaders} from '../helpers/headers'
 import {createError} from '../helpers/error'
+
 export default function xhr(config: AxiosRequestConfig): AxiosPromise {
   return new Promise((resolve, reject) => {
-    let { data = null, url, method = 'get', headers, responseType, timeout } = config
+    let { data = null, url, method = 'get', headers, responseType, timeout, cancelToken } = config
     const request = new XMLHttpRequest()
     if (responseType) request.responseType = responseType
     if (timeout) request.timeout = timeout
@@ -58,6 +59,14 @@ export default function xhr(config: AxiosRequestConfig): AxiosPromise {
         request.setRequestHeader(name, headers[name])
       }
     })
+
+    if (cancelToken) {
+      cancelToken.promise.then(reason => {
+        request.abort()
+        console.log(reason, 'reason .. ..')
+        reject(reason)
+      })
+    }
     request.send(data)
   })
 }

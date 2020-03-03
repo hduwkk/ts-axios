@@ -1,5 +1,3 @@
-import { transformRequest } from "../helpers/data";
-
 export type Method = 'get' | 'GET' | 'delete' | 'DELETE' | 'head' | 'HEAD' | 'options' | 'OPTIONS' | 'post' | 'POST' | 'put' | 'PUT' | 'patch' | 'PATCH'
 export interface AxiosRequestConfig {
   [propName: string]: any
@@ -12,6 +10,7 @@ export interface AxiosRequestConfig {
   responseType?: XMLHttpRequestResponseType // 它的定义是"" | 'arraybuffer' | 'blob' | 'document' | 'json' | 'text'
   transformRequest?: AxiosTransformer | AxiosTransformer[]
   transformResponse?: AxiosTransformer | AxiosTransformer[]
+  cancelToken?: CancelToken
 }
 export interface AxiosTransformer {
   (data: any, headers?: any): any
@@ -56,6 +55,13 @@ export interface AxiosInatance extends Axios {
   <T = any>(url: string, config?: AxiosRequestConfig): AxiosPromise<T>
 }
 
+export interface AxiosStatic extends AxiosInatance {
+  create(config?: AxiosRequestConfig): AxiosInatance
+  isCancel: (value: any) => boolean
+  Cancel: CancelStatic
+  CancelToken: CancelTokenSourceStatic
+}
+
 export interface AxiosInterceptorManager<T> {
   use(resolved: ResolvedFn<T>, rejected?: RejectedFn): number
   eject(id: number): void
@@ -67,4 +73,36 @@ export interface ResolvedFn<T = any> {
 
 export interface RejectedFn {
   (error: any): any
+}
+
+export interface CancelStatic {
+  new(message?: string): Cancel
+}
+
+export interface Cancel {
+  message?: string
+}
+
+export interface CancelToken {
+  promise: Promise<Cancel>
+  reason?: Cancel
+  throwIfRequested(): void
+}
+
+export interface Canceler {
+  (message?: string): void
+}
+
+export interface CancelExecutor {
+  (cancel: Canceler): void
+}
+
+export interface CancelTokenSource {
+  token: CancelToken
+  cancel: Canceler
+}
+
+export interface CancelTokenSourceStatic {
+  new (executor: CancelExecutor): CancelToken
+  source(): CancelTokenSource
 }
