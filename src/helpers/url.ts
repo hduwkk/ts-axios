@@ -1,15 +1,13 @@
-import {isDate, isPlainObject} from './util'
-import { isObject } from 'util';
-
-function encode (val: string): string {
+import { isDate, isPlainObject } from './util'
+function encode(val: string): string {
   return encodeURIComponent(val)
-  .replace(/%40/g, '@')
-  .replace(/%3A/gi, ':')
-  .replace(/%24/g, '$')
-  .replace(/%2C/gi, ',')
-  .replace(/%20/g, '+')
-  .replace(/%5B/gi, '[')
-  .replace(/%5D/gi, ']')
+    .replace(/%40/g, '@')
+    .replace(/%3A/gi, ':')
+    .replace(/%24/g, '$')
+    .replace(/%2C/gi, ',')
+    .replace(/%20/g, '+')
+    .replace(/%5B/gi, '[')
+    .replace(/%5D/gi, ']')
 }
 
 // 数组: /base/get?foo[]=bar&foo[]=baz'
@@ -36,7 +34,7 @@ export function buildURL(url: string, params?: any) {
     values.forEach(val => {
       if (isDate(val)) {
         val = val.toISOString()
-      } else if (isObject(val)) {
+      } else if (isPlainObject(val)) {
         val = JSON.stringify(val)
       }
       parts.push(`${encode(key)}=${encode(val)}`)
@@ -52,4 +50,25 @@ export function buildURL(url: string, params?: any) {
     url += (url.indexOf('?') === -1 ? '?' : '&') + serizlizedParams
   }
   return url
+}
+
+interface URLOrigin {
+  protocol: string
+  host: string
+}
+
+export function isURLSameOrigin(requestURL: string): boolean {
+  const parsedOrigin = resolveURL(requestURL)
+  return (
+    parsedOrigin.protocol === currentOrigin.protocol && parsedOrigin.host === currentOrigin.host
+  )
+}
+
+const urlParingNode = document.createElement('a')
+const currentOrigin = resolveURL(window.location.href)
+
+function resolveURL(url: string): URLOrigin {
+  urlParingNode.setAttribute('href', url)
+  const { protocol, host } = urlParingNode
+  return { protocol, host }
 }
