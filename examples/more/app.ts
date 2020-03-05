@@ -1,5 +1,6 @@
 import axios from '../../src/index'
-import NProgress from 'nprogress'
+import qs from 'qs'
+// import NProgress from 'nprogress'
 // document.cookie = 'a=b'
 
 // axios.get('/more/get').then(res => {
@@ -82,9 +83,51 @@ import NProgress from 'nprogress'
 // ;(window as any).NProgress = NProgress
 
 // auth
-axios.post(
-  '/more/post',
-  {a: 1},
-  {auth: {username: 'Yee', password: '123321'}
+// axios.post(
+//   '/more/post',
+//   {a: 1},
+//   {auth: {username: 'Yee', password: '123321'}
+// })
+//   .then(res => { console.log(res, 'res .. ..') })
+console.log(22)
+
+// axios.get('/more/get', {
+//   params: new URLSearchParams('a=b&c=d')
+// }).then(res => {
+//   console.log(res)
+// })
+
+// axios.get('/more/get', {
+//   params: {
+//     a: 1,
+//     b: 2,
+//     c: ['a', 'b', 'c']
+//   }
+// }).then(res => {
+//   console.log(res)
+// })
+
+// const instance = axios.create({
+//   paramsSerializer(params) {
+//     return qs.stringify(params, { arrayFormat: 'comma' })
+//   }
+// })
+
+// instance.get('/more/get', {
+//   params: {
+//     a: 1,
+//     b: 2,
+//     c: ['a', 'b', 'c']
+//   }
+// }).then(res => {
+//   console.log(res)
+// })
+
+
+const instance = axios.create({
+  baseURL: 'https://img.mukewang.com/'
 })
-  .then(res => { console.log(res, 'res .. ..') })
+
+instance.get('5cc01a7b0001a33718720632.jpg')
+
+instance.get('https://img.mukewang.com/szimg/5becd5ad0001b89306000338-360-202.jpg')

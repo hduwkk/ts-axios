@@ -12,7 +12,7 @@ const defaults: AxiosRequestConfig = {
     }
   },
   validateStatus(status: number) {
-    return status > 200 && status < 300
+    return status >= 200 && status < 300
   },
   transformRequest: [
     function(data: any, headers: any): any {

@@ -21,6 +21,7 @@ export interface AxiosRequestConfig {
   params?: any
   headers?: any
   timeout?: number
+  baseURL?: string
   responseType?: XMLHttpRequestResponseType // 它的定义是"" | 'arraybuffer' | 'blob' | 'document' | 'json' | 'text'
   transformRequest?: AxiosTransformer | AxiosTransformer[]
   transformResponse?: AxiosTransformer | AxiosTransformer[]
@@ -32,6 +33,7 @@ export interface AxiosRequestConfig {
   onUploadProgress?: (e: ProgressEvent) => void
   auth?: AxiosBasicCredentials
   validateStatus?: (status: number) => boolean
+  paramsSerializer?: (params: any) => string
 }
 export interface AxiosBasicCredentials {
   username: string
@@ -72,6 +74,8 @@ export interface Axios {
   post<T = any>(url: string, data?: any, config?: AxiosRequestConfig): AxiosPromise<T>
   put<T = any>(url: string, data?: any, config?: AxiosRequestConfig): AxiosPromise<T>
   patch<T = any>(url: string, data?: any, config?: AxiosRequestConfig): AxiosPromise<T>
+
+  getUri(config?: AxiosRequestConfig): string
 }
 
 export interface AxiosInatance extends Axios {
@@ -84,6 +88,9 @@ export interface AxiosStatic extends AxiosInatance {
   isCancel: (value: any) => boolean
   Cancel: CancelStatic
   CancelToken: CancelTokenSourceStatic
+
+  all<T>(promises: Array<T | Promise<T>>): Promise<T[]>
+  spread<T, R>(callback: (...args: T[]) => R): (arr: T[]) => R
 }
 
 export interface AxiosInterceptorManager<T> {
